@@ -1,0 +1,86 @@
+service: twitter-server-python3
+
+custom:
+  dotenv:
+    basePath: ./
+  stage: ${env:STAGE}
+  region: ${env:REGION}
+  pythonRequirements:
+    dockerizePip: true
+
+provider:
+  name: aws
+  runtime: python3.7
+  stage: ${self:custom.stage}
+  region: ${self:custom.region}
+  apiName: ${self:service}-${self:provider.stage}
+
+plugins:
+  - serverless-python-requirements
+  - serverless-dotenv-plugin
+  - serverless-offline
+
+functions:
+  hello:
+    handler: handler.hello
+    name: ${self:service}-hello-${self:provider.stage}
+    events:
+      - http:
+          path: /hello
+          method: get
+          integration: lambda
+          cors: true
+  get_me:
+    handler: handler.get_me
+    name: ${self:service}-get_me-${self:provider.stage}
+    events:
+      - http:
+          path: /me
+          method: get
+          integration: lambda
+          cors: true
+  get_follow:
+    handler: handler.get_follow
+    name: ${self:service}-get_follow-${self:provider.stage}
+    events:
+      - http:
+          path: /follow
+          method: get
+          integration: lambda
+          cors: true
+  get_list:
+    handler: handler.get_list
+    name: ${self:service}-get_list-${self:provider.stage}
+    events:
+      - http:
+          path: /list
+          method: get
+          integration: lambda
+          cors: true
+  post_list:
+    handler: handler.post_list
+    name: ${self:service}-post_list-${self:provider.stage}
+    events:
+      - http:
+          path: /list
+          method: post
+          integration: lambda
+          cors: true
+  delete_list:
+    handler: handler.delete_list
+    name: ${self:service}-delete_list-${self:provider.stage}
+    events:
+      - http:
+          path: /list
+          method: delete
+          integration: lambda
+          cors: true
+  post_list_members:
+    handler: handler.post_list_members
+    name: ${self:service}-post_list_members-${self:provider.stage}
+    events:
+      - http:
+          path: /list/members
+          method: post
+          integration: lambda
+          cors: true
